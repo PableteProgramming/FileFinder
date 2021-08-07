@@ -1,1 +1,2 @@
+add_subdirectory(ArgsParser)
 add_subdirectory(FileFinder)
