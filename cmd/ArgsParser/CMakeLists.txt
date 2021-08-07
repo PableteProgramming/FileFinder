@@ -14,7 +14,7 @@ set(SRC_FILES
     ${PLAT_SRC_FILES}
 )
 
-add_library(${PROJECT_NAME} ${SRC_FILES})
+add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 
 target_include_directories(
     ${PROJECT_NAME} PUBLIC
