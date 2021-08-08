@@ -18,3 +18,9 @@ target_link_libraries(
     ${PROJECT_NAME}
     ArgsParser
 )
+
+set_target_properties(
+    ${PROJECT_NAME} PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)

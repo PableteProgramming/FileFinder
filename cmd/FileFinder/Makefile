@@ -24,7 +24,7 @@ $(OUT_FILE): $(OBJ_FILES) $(ARGSPARSER_LIB_FILE)
 
 $(OBJ_FILES): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(OBJ_DIR)
-	$(CXX) -c -o $@ $< -I$(INC_DIR) -I$(ARGSPARSER_INC_DIR)
+	$(CXX) -c -o $@ $< -I$(INC_DIR) -I$(ARGSPARSER_INC_DIR) -std=c++17
 
 $(ARGSPARSER_LIB_FILE):
 	cd ../ArgsParser && \
