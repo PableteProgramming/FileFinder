@@ -1,6 +1,3 @@
-#define ARGSPARSER_EXPORTS
-#include <windows.hpp>
-
 #include <argsparser.hpp>
 ArgsParser::ArgsParser(std::vector<std::string> _options) {
 	options = _options;
