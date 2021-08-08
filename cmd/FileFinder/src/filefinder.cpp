@@ -49,7 +49,7 @@ int main(int argc,char* argv[]){
             if(result[i].second){
                 if(result[i].first.second!=""){
                     dirFound=true;
-                    dir=result[i].first.second!="";
+                    dir=result[i].first.second;
                 }
             }
         }
@@ -58,7 +58,7 @@ int main(int argc,char* argv[]){
             if(result[i].second){
                 if(result[i].first.second!=""){
                     searchFound=true;
-                    search=result[i].first.second!="";
+                    search=result[i].first.second;
                 }
             }
         }
@@ -69,18 +69,70 @@ int main(int argc,char* argv[]){
     }
 
     if(!searchFound){
-        std::cout<<"Please input the words to match after the -s or --search param";
+        std::cout<<"Please input the words to match after the -s or --search param"<<std::endl;
         return 1;
     }
 
     PerformSearch(dir,search,recursive,verbose,file,content);
     
-    std::cout<<"FileFinder"<<std::endl;
+    //std::cout<<"FileFinder"<<std::endl;
     return 0;
 }
 
 void PerformSearch(std::string dir,std::string search,bool r,bool v,bool f,bool c){
-    for (const auto & entry : fs::directory_iterator(dir)){
-        std::cout<<entry.path()<<std::endl;
+    if(!fs::exists(dir) || !fs::is_directory(dir)){
+        std::cout<< "Path \""<<dir<<"\" is not a directory or it does not exist!"<<std::endl;
+        return;
     }
+    for (const auto & entry : fs::directory_iterator(dir)){
+        std::string path= entry.path().string();
+        std::string rpath="";
+        bool end=false;
+        for(int i=0; i<path.size();i++){
+            if(!end && path[i]!='.' && path[i]!='/' && path[i]!='\\'){
+                end=true;
+                //we get all the points before it
+                int j=i;
+                while(true){
+                    j--;
+                    if(path[j]=='.'){
+                        rpath+= ".";
+                    }
+                    else{
+                        break;
+                    }
+                }
+            }
+            if(end){
+                rpath+= path[i];
+            }
+        }
+        if(f){
+            if(StringContains(rpath,search)){
+                std::cout<<rpath<<std::endl;
+            }
+        }
+        if(c){
+            if(StringContains(rpath,GetFileContent(entry.path().string()))){
+                std::cout<<rpath<<std::endl;
+            }
+        }
+    }
+}
+
+std::string GetFileContent(std::string s){
+    std::ifstream ifs(s);
+    if(!ifs){
+        return "";
+    }
+    std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+    return content;
+}
+
+bool StringContains(std::string s,std::string s1){
+    auto it = std::search(s.begin(), s.end(), std::boyer_moore_searcher(s1.begin(), s1.end()));
+    if(it != s.end()){
+        return true;
+    }
+    return false;
 }
