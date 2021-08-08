@@ -1,7 +1,8 @@
 #include <filefinder.hpp>
 
 int main(int argc,char* argv[]){
-    std::vector<std::string> opts = {"-d","--directory","--search","-s","-r","--recursive","-v","--verbose","-f","--file","-c","--content"};
+    std::cout<<dye::red("Parsing args...")<<std::endl;
+    std::vector<std::string> opts = {dirParam1,dirParam2,searchParam1,searchParam2,recursiveParam1,recursiveParam2,verboseParam1,verboseParam2,fileParam1,fileParam2,contentParam1,contentParam2,caseParam1,caseParam2,helpParam1,helpParam2};
     ArgsParser parser(opts);
     
     //parse params
@@ -16,36 +17,50 @@ int main(int argc,char* argv[]){
     std::string search;
     bool file=false;
     bool content=false;
+    bool caseSensitive=false;
 
 	//result: vector<pair<pair<PARAM,VALUE>,FOUND>>
 
     for(int i=0; i<result.size();i++){
         //verbose
-        if(result[i].first.first=="-v" || result[i].first.first=="--verbose"){
+        if(result[i].first.first==verboseParam1 || result[i].first.first==verboseParam2){
             if(result[i].second){
                 verbose=true;
             }
         }
         //recursive
-        if(result[i].first.first=="-r" || result[i].first.first=="--recursive"){
+        if(result[i].first.first==recursiveParam1 || result[i].first.first==recursiveParam2){
             if(result[i].second){
                 recursive=true;
             }
         }
         //file
-        if(result[i].first.first=="-f" || result[i].first.first=="--file"){
+        if(result[i].first.first==fileParam1 || result[i].first.first==fileParam2){
             if(result[i].second){
                 file=true;
             }
         }
         //content
-        if(result[i].first.first=="-c" || result[i].first.first=="--content"){
+        if(result[i].first.first==contentParam1 || result[i].first.first==contentParam2){
             if(result[i].second){
                 content=true;
             }
         }
+        //case sensitive
+        if(result[i].first.first==caseParam1 || result[i].first.first==caseParam2){
+            if(result[i].second){
+                caseSensitive=true;
+            }
+        }
+        //case sensitive
+        if(result[i].first.first==helpParam1 || result[i].first.first==helpParam2){
+            if(result[i].second){
+                Help();
+                return 0;
+            }
+        }
         //dir
-        if(result[i].first.first=="-d" || result[i].first.first=="--directory"){
+        if(result[i].first.first==dirParam1 || result[i].first.first==dirParam2){
             if(result[i].second){
                 if(result[i].first.second!=""){
                     dirFound=true;
@@ -54,7 +69,7 @@ int main(int argc,char* argv[]){
             }
         }
         //search
-        if(result[i].first.first=="-s" || result[i].first.first=="--search"){
+        if(result[i].first.first==searchParam1 || result[i].first.first==searchParam2){
             if(result[i].second){
                 if(result[i].first.second!=""){
                     searchFound=true;
@@ -73,18 +88,23 @@ int main(int argc,char* argv[]){
         return 1;
     }
 
-    PerformSearch(dir,search,recursive,verbose,file,content);
+    PerformSearch(dir,search,recursive,verbose,file,content,caseSensitive);
     
     //std::cout<<"FileFinder"<<std::endl;
     return 0;
 }
 
-void PerformSearch(std::string dir,std::string search,bool r,bool v,bool f,bool c){
+void PerformSearch(std::string dir,std::string search,bool r,bool v,bool f,bool c,bool cs){
+    //std::cout<<"c=>"<<c<<std::endl;
     if(!fs::exists(dir) || !fs::is_directory(dir)){
         std::cout<< "Path \""<<dir<<"\" is not a directory or it does not exist!"<<std::endl;
         return;
     }
+
     for (const auto & entry : fs::directory_iterator(dir)){
+        if(fs::is_directory(entry.path().string())){
+            continue;
+        }
         std::string path= entry.path().string();
         std::string rpath="";
         bool end=false;
@@ -108,13 +128,37 @@ void PerformSearch(std::string dir,std::string search,bool r,bool v,bool f,bool 
             }
         }
         if(f){
-            if(StringContains(rpath,search)){
-                std::cout<<rpath<<std::endl;
+            if(cs){
+                if(StringContains(rpath,search)){
+                    //file found
+                    std::cout<<dye::green(rpath)<<std::endl;
+                }
+            }
+            else{
+                if(StringContains(ToLower(rpath),ToLower(search))){
+                    //file found
+                    std::cout<<dye::green(rpath)<<std::endl;
+                }
             }
         }
         if(c){
-            if(StringContains(rpath,GetFileContent(entry.path().string()))){
-                std::cout<<rpath<<std::endl;
+            if(cs){
+                //std::cout<<"Checking "<<rpath<<std::endl;
+                std::string content= GetFileContent(entry.path().string());
+                //std::cout<<"Content => "<<content<<std::endl;
+                if(StringContains(content,search)){
+                    //file with content found
+                    std::cout<<dye::blue(rpath)<<std::endl;
+                }
+            }
+            else{
+                //std::cout<<"Checking "<<rpath<<std::endl;
+                std::string content= GetFileContent(entry.path().string());
+                //std::cout<<"Content => "<<content<<std::endl;
+                if(StringContains(ToLower(content),ToLower(search))){
+                    //file with content found
+                    std::cout<<dye::blue(rpath)<<std::endl;
+                }
             }
         }
     }
@@ -135,4 +179,25 @@ bool StringContains(std::string s,std::string s1){
         return true;
     }
     return false;
+}
+
+std::string ToLower(std::string s){
+    std::string s1=s;
+    for(int i=0; i<s.size();i++){
+        s1[i]= tolower(s[i]);
+    }
+    return s1;
+}
+
+void Help(){
+    std::cout<<"Non-optional parameters:"<<std::endl;
+    std::cout<<"search words => -s|--search [words]"<<std::endl;
+    std::cout<<std::endl<<"Optional parameters:"<<std::endl;
+    std::cout<<"search in file content => -c|--content"<<std::endl;
+    std::cout<<"search in file names => -f|--file"<<std::endl;
+    std::cout<<"verbose mode => -v|--verbose"<<std::endl;
+    std::cout<<"search in subdirectories => -r|--recursive"<<std::endl;
+    std::cout<<"the root search directory (default= .) => -d|--directory [directory]"<<std::endl;
+    std::cout<<"case sensitive => -cs|--case-sensitive"<<std::endl;
+    std::cout<<"help => -h|--help"<<std::endl;
 }
