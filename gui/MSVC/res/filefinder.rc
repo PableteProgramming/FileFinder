@@ -1,0 +1,24 @@
+#include "rc.h"
+
+HelpDialog DIALOGEX 0, 0, 183, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Help"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,126,68,50,14
+    LTEXT           "In the url input, provide the url of the file to download",IDC_STATIC,7,8,169,19
+    LTEXT           "In output file input, provide the output file name of the downloaded file",IDC_STATIC,7,28,169,19
+    LTEXT           "Finally, click on the download button and the file will be downloaded",IDC_STATIC,7,48,169,19
+END
+
+ID_MENU1 MENU
+BEGIN
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Exit",                        ID_EXIT
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "Dialog",                        ID_HELP
+    END
+END
