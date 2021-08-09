@@ -2,3 +2,7 @@
 /.vscode/
 /cmake-build/
 /make-build/
+
+*.o
+/cmd/termcolor/build/
+/cmd/termcolor/docs/_build

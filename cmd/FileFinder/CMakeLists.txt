@@ -16,9 +16,9 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
+    termcolor
     ArgsParser
 )
-
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17

@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <functional>
-#include <color.hpp>
+#include <termcolor/termcolor.hpp>
 namespace fs= std::filesystem;
 
 const std::string contentParam1="-c";

@@ -1,2 +1,3 @@
+add_subdirectory(termcolor)
 add_subdirectory(ArgsParser)
 add_subdirectory(FileFinder)

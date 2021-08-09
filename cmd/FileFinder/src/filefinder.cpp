@@ -76,7 +76,7 @@ int main(int argc,char* argv[]){
     }
 
     if(!searchFound){
-        std::cout<<dye::red("Please input the words to match after the -s or --search param")<<std::endl;
+        std::cout<<termcolor::red<<"Please input the words to match after the -s or --search param"<<termcolor::reset<<std::endl;
         Help();
         return 1;
     }
@@ -85,10 +85,10 @@ int main(int argc,char* argv[]){
         file=true;
     }
 
-    std::cout<<dye::red("-----------------------------------------")<<std::endl;
-    std::cout<<dye::red("|")<<dye::blue("blue")<<" => search matched in file content"<<dye::red(" |")<<std::endl;
-    std::cout<<dye::red("|")<<dye::green("green")<<" => search matched in file name"<<dye::red("   |")<<std::endl;
-    std::cout<<dye::red("-----------------------------------------")<<std::endl;
+    std::cout<<termcolor::red<<"-----------------------------------------"<<termcolor::reset<<std::endl;
+    std::cout<<termcolor::red<<"|"<<termcolor::blue<<"blue"<<termcolor::reset<<" => search matched in file content"<<termcolor::red<<" |"<<termcolor::reset<<std::endl;
+    std::cout<<termcolor::red<<"|"<<termcolor::green<<"green"<<termcolor::reset<<" => search matched in file name"<<termcolor::red<<"   |"<<termcolor::reset<<std::endl;
+    std::cout<<termcolor::red<<"-----------------------------------------"<<termcolor::reset<<std::endl;
 
     PerformSearch(dir,search,recursive,file,content,caseSensitive);
     
@@ -133,13 +133,13 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                 if(cs){
                     if(StringContains(rpath,search)){
                         //file found
-                        std::cout<<dye::green(rpath)<<std::endl;
+                        std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
                 else{
                     if(StringContains(ToLower(rpath),ToLower(search))){
                         //file found
-                        std::cout<<dye::green(rpath)<<std::endl;
+                        std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
             }
@@ -150,7 +150,7 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                     //std::cout<<"Content => "<<content<<std::endl;
                     if(StringContains(content,search)){
                         //file with content found
-                        std::cout<<dye::blue(rpath)<<std::endl;
+                        std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
                 else{
@@ -159,7 +159,7 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                     //std::cout<<"Content => "<<content<<std::endl;
                     if(StringContains(ToLower(content),ToLower(search))){
                         //file with content found
-                        std::cout<<dye::blue(rpath)<<std::endl;
+                        std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
             }
@@ -196,13 +196,13 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                 if(cs){
                     if(StringContains(rpath,search)){
                         //file found
-                        std::cout<<dye::green(rpath)<<std::endl;
+                        std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
                 else{
                     if(StringContains(ToLower(rpath),ToLower(search))){
                         //file found
-                        std::cout<<dye::green(rpath)<<std::endl;
+                        std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
             }
@@ -213,7 +213,7 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                     //std::cout<<"Content => "<<content<<std::endl;
                     if(StringContains(content,search)){
                         //file with content found
-                        std::cout<<dye::blue(rpath)<<std::endl;
+                        std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
                 else{
@@ -222,7 +222,7 @@ void PerformSearch(std::string dir,std::string search,bool r,bool f,bool c,bool 
                     //std::cout<<"Content => "<<content<<std::endl;
                     if(StringContains(ToLower(content),ToLower(search))){
                         //file with content found
-                        std::cout<<dye::blue(rpath)<<std::endl;
+                        std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
                     }
                 }
             }
