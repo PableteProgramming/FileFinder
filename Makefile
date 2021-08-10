@@ -1,8 +1,9 @@
 #root dir makefile
 CMD_DIR= cmd
 GUI_DIR= gui
+FUNCS_DIR= funcs
 
-.PHONY: all cmd gui
+.PHONY: all funcs cmd gui
 
 all: cmd gui
 
@@ -12,4 +13,8 @@ cmd:
 
 gui:
 	cd $(GUI_DIR) && \
+	make
+
+funcs:
+	cd $(FUNCS_DIR) && \
 	make

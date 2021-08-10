@@ -2,9 +2,8 @@
 #include <fstream>
 #include <argsparser.hpp>
 #include <filesystem>
-#include <algorithm>
-#include <functional>
 #include <termcolor/termcolor.hpp>
+#include <funcs.hpp>
 namespace fs= std::filesystem;
 
 const std::string contentParam1="-c";
@@ -23,7 +22,4 @@ const std::string helpParam1= "-h";
 const std::string helpParam2= "--help";
 
 void PerformSearch(std::string,std::string,bool,bool,bool,bool);
-std::string GetFileContent(std::string);
-bool StringContains(std::string,std::string);
-std::string ToLower(std::string);
 void Help();

@@ -102,3 +102,137 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     }
     return FALSE;
 }
+
+void PerformSearch(std::string search,std::string dir,bool r,bool f,bool c,bool cs){
+    //std::cout<<"c=>"<<c<<std::endl;
+    if(!fs::exists(dir) || !fs::is_directory(dir)){
+        //std::cout<< "Path \""<<dir<<"\" is not a directory or it does not exist!"<<std::endl;
+        return;
+    }
+    if(!r){
+        for (const auto & entry : fs::directory_iterator(dir)){
+            if(fs::is_directory(entry.path().string())){
+                continue;
+            }
+            std::string path= entry.path().string();
+            std::string rpath="";
+            bool end=false;
+            for(int i=0; i<path.size();i++){
+                if(!end && path[i]!='.' && path[i]!='/' && path[i]!='\\'){
+                    end=true;
+                    //we get all the points before it
+                    int j=i;
+                    while(true){
+                        j--;
+                        if(path[j]=='.'){
+                            rpath+= ".";
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+                if(end){
+                    rpath+= path[i];
+                }
+            }
+            if(f){
+                if(cs){
+                    if(StringContains(rpath,search)){
+                        //file found
+                        //std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+                else{
+                    if(StringContains(ToLower(rpath),ToLower(search))){
+                        //file found
+                        //std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+            }
+            if(c){
+                if(cs){
+                    //std::cout<<"Checking "<<rpath<<std::endl;
+                    std::string content= GetFileContent(entry.path().string());
+                    //std::cout<<"Content => "<<content<<std::endl;
+                    if(StringContains(content,search)){
+                        //file with content found
+                        //std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+                else{
+                    //std::cout<<"Checking "<<rpath<<std::endl;
+                    std::string content= GetFileContent(entry.path().string());
+                    //std::cout<<"Content => "<<content<<std::endl;
+                    if(StringContains(ToLower(content),ToLower(search))){
+                        //file with content found
+                        //std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+            }
+        }
+    }
+    else{
+        for (const auto & entry : fs::recursive_directory_iterator(dir)){
+            if(fs::is_directory(entry.path().string())){
+                continue;
+            }
+            std::string path= entry.path().string();
+            std::string rpath="";
+            bool end=false;
+            for(int i=0; i<path.size();i++){
+                if(!end && path[i]!='.' && path[i]!='/' && path[i]!='\\'){
+                    end=true;
+                    //we get all the points before it
+                    int j=i;
+                    while(true){
+                        j--;
+                        if(path[j]=='.'){
+                            rpath+= ".";
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+                if(end){
+                    rpath+= path[i];
+                }
+            }
+            if(f){
+                if(cs){
+                    if(StringContains(rpath,search)){
+                        //file found
+                        //std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+                else{
+                    if(StringContains(ToLower(rpath),ToLower(search))){
+                        //file found
+                        //std::cout<<termcolor::green<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+            }
+            if(c){
+                if(cs){
+                    //std::cout<<"Checking "<<rpath<<std::endl;
+                    std::string content= GetFileContent(entry.path().string());
+                    //std::cout<<"Content => "<<content<<std::endl;
+                    if(StringContains(content,search)){
+                        //file with content found
+                        //std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+                else{
+                    //std::cout<<"Checking "<<rpath<<std::endl;
+                    std::string content= GetFileContent(entry.path().string());
+                    //std::cout<<"Content => "<<content<<std::endl;
+                    if(StringContains(ToLower(content),ToLower(search))){
+                        //file with content found
+                        //std::cout<<termcolor::blue<<rpath<<termcolor::reset<<std::endl;
+                    }
+                }
+            }
+        }
+    }
+}
